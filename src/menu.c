@@ -19,7 +19,7 @@ settings AppSettings = {
 
 uint8_t HH,MM,SS;
 
-void init() {
+void initMenu() {
 	_delay_ms(20);
 	LCD_Init();
 

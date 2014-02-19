@@ -8,7 +8,7 @@
 #include <util/delay.h> 
 
 
-#ifndef KEYS	
+#if !defined(KEYS) || !defined(ROW) || ! defined(COLUMN)
 // data direction port a
 #define KEYS	DDRA
 // port a output

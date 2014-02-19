@@ -2,14 +2,7 @@
 #include <util/delay.h>
 #include  "display.h"
 
-#define TRUE 		1
-#define RS 			4
-#define E 			5
-#define LCD 		PORTC
-#define LCD_D		DDRC
-#define DISPLAY 	2
-#define CURSOR 		1
-#define CURSOR_B 	0
+
 
 unsigned char S_LCD = 7;
 uint8_t position = 0;

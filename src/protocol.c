@@ -2,29 +2,28 @@
 #include <stdint.h>
 #define F_CPU 3686400UL     /* Quarz mit 3.6864 Mhz */
 #include <util/delay.h>   
+/* Defines für Includes */
+/* LCD Port */
+#define LCD 	PORTC
+#define LCD_D 	DDRC
+/* Input port */
+#define KEYS 	DDRA
+#define ROW		PORTA
+#define COLUMN	PINA
+/* Phy Port */
+#define PHYPort		PORTB
+#define PHYPort_D	DDRB
+#define PHYPin		PB1
+/* Lib includes */
 #include "input.h"
 #include "display.h"
 #include "menu.h"
-
-
+/* Defines */
 #define TRUE 1
 #define FALSE 0
 
-#define LED		PORTB
-#define LED_D 	DDRB
-
-/**
-	1
-	|
-  4-5-6
-	|
-	9
-*/
-
-#define wait _delay_ms(1000);_delay_ms(1000);_delay_ms(1000);_delay_ms(1000)
-
 int main(){
-	init();
+	initMenu();
 
 	while(TRUE){
 		process(scanCode());

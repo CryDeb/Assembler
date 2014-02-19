@@ -44,7 +44,7 @@ typedef enum inputState {
 	UP = 1, LEFT = 4, ENTER, RIGHT, DOWN = 9
 } inputState;
 
-void init();
+void initMenu();
 void print_splash();
 void display();
 void process(uint8_t Input);

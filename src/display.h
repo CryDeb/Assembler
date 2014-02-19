@@ -3,6 +3,17 @@
 
 #include <stdint.h>
 
+#define TRUE 		1
+#define RS 			4
+#define E 			5
+#if !defined(LCD) || !defined(LCD_D)
+#define LCD 		PORTC
+#define LCD_D		DDRC
+#endif
+#define DISPLAY 	2
+#define CURSOR 		1
+#define CURSOR_B 	0
+
 void LCD_Init();
 void function_set(unsigned char p_byte);
 void commands(unsigned char p_byte);
