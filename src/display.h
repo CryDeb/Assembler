@@ -7,8 +7,8 @@
 #define RS 			4
 #define E 			5
 #if !defined(LCD) || !defined(LCD_D)
-#define LCD 		PORTC
-#define LCD_D		DDRC
+#define LCD 		PORTA
+#define LCD_D		DDRA
 #endif
 #define DISPLAY 	2
 #define CURSOR 		1
