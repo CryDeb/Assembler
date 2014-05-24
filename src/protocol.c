@@ -25,31 +25,48 @@
 #define TRUE 1
 #define FALSE 0
 
-extern uint8_t Byte;
+//extern uint8_t Byte;
+#define MODE RX
 
 int main(){
 	DDRC = 0xFF;
+	uint8_t Tmp = 0;
+	/*
 	initMenu();
+	//*/
 	initPhyLayer();
-//	setMode(TX);
-	frame_t Frame = {
-		1,1,0,0,1,0
-	};
-	W1s();
+	setMode(MODE);
+	/*
+	 Destination;
+	 Source;
+	 SequenceNumL;
+	 SequenceNumH;
+	 CommandNumber;
+	 Parameters;*/
+
+  uint8_t b[] = {3,6,7,8};
+	frame_t Frame = {1,2,3,4,5, .Parameters = b};
+
+	startListening(receiveFrame);
 	while(TRUE){
-		LCD_STR("Waiting");
-		W1s();
-		LCD_CLR();
-		/*process(scanCode());
-		display();*/
-		/*
-		putByte(0x0F);
-		W1s();W1s();
-		putByte(0xF0);
-		W1s();W1s();
-		/*/
-		
-				
+		if(MODE == TX)
+		{
+			/*putByteAsync(0x55,TRUE);
+			W1s();W1s();
+			putByteAsync(0xAA, TRUE);
+			W1s();W1s();*/
+//			putByteAsync(i,TRUE);
+			sendFrame(&Frame);
+
+		W100ms();
+		}
+		else
+		{
+			//getByteAsync(TRUE);
+			W10ms();
+			//W1s();W1s();
+			//getByteAsync();
+		}
 	}
 }
 

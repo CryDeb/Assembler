@@ -19,13 +19,42 @@
 
 #define TIMEBETWEENBITS 1000
 
-typedef enum { RX, TX} PHYModes;
+#define ACK 0x06
+#define NAK 0x15
 
-void initPhyLayer();
-uint8_t putByte(uint8_t Byte);
-uint8_t getByte();
-void sendJam();
-void putString(char *Buffer);
-void setMode(PHYModes Mode);
+#define TRUE 1
+#define FALSE 0
+
+#define BUFFERSIZE 3
+
+typedef enum { RX, TX} PHYModes;
+typedef enum { CS_STARTBIT, CS_FRAMEBIT, CS_STOPBIT, CS_SENDJAM,CS_FINISHED} ComunicationState;
+typedef enum { 
+	SUCCESS = 0, 
+	COLLISIONDETECTED, 
+	BUFFEROVF, 
+	INVALIDSTATE,
+	WOULDBLOCK
+} CommunicationError;
+
+typedef void (*ByteReceivedHandler)(uint8_t Byte);
+
+ByteReceivedHandler receivedByte;
+volatile PHYModes CommunicationMode;
+volatile ComunicationState CurrentState;
+volatile uint8_t Frame;
+volatile CommunicationError LastError;
+
+CommunicationError initPhyLayer();
+CommunicationError putByte(uint8_t Byte);
+CommunicationError getByte(uint8_t *Byte);
+CommunicationError putByteAsync(uint8_t Byte, uint8_t Block);
+CommunicationError getByteAsync(uint8_t Block);
+CommunicationError putString(char *Buffer);
+CommunicationError setMode(PHYModes Mode);
+CommunicationError getLastError();
+CommunicationError startListening(ByteReceivedHandler Handler);
+CommunicationError stopListening();
+
 
 #endif
