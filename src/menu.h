@@ -5,8 +5,8 @@
 
 
 typedef struct position {
-	uint8_t PosY:6;
-	uint8_t PosX:2;
+	uint8_t PosX:6;
+	uint8_t PosY:2;
 } position;
 
 typedef void (*com)(uint8_t param);
@@ -18,7 +18,7 @@ typedef struct command {
 
 typedef struct field {
 	position Pos;
-	command Up;
+	command Up; 
 	command Left;
 	command Enter;
 	command Right;
@@ -34,15 +34,17 @@ typedef struct layer {
 typedef struct settings {
 	uint8_t	  mpr;
 	uint8_t	  Status:3; // 0b00000CSD (Cursor,Static,Dynamic)
-	uint8_t	  Modus:1;
+	uint8_t	  Modus:1; // VIEW/EDIT
 	layer	  *currentLayer;
 	field	  *currentField;
 	layer	  *Layers[];
 } settings;
 
 typedef enum inputState {
-	UP = 1, LEFT = 4, ENTER, RIGHT, DOWN = 9
+	UP = 5, LEFT = 2, ENTER=6, RIGHT=10, DOWN = 7
 } inputState;
+
+#define NUMBEROFUSEDINPUTS 5
 
 void initMenu();
 void print_splash();

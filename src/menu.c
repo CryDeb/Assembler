@@ -13,27 +13,29 @@ settings AppSettings = {
 	.Layers = {
 		&SettingsLayer,
 		&ShowTimeLayer,
-		NULL
+		&ChangeTimeLayer
 	}
 };
 
-uint8_t HH,MM,SS;
+uint8_t HH = 02, MM = 50 ,SS = 15;
+uint8_t inputRepeat=1;
 
 void initMenu() {
 	_delay_ms(20);
 	LCD_Init();
 
 	print_splash();
-	/*AppSettings.currentField = &TimeField;
-	AppSettings.currentLayer = &SettingsLayer;
-	AppSettings.Status = 7;*/
+	AppSettings.currentLayer = &ShowTimeLayer;
+	AppSettings.currentField = AppSettings.currentLayer->Fields[0];
+	AppSettings.Status = 7;
+	display();
 }
 
 void print_splash() {
 	LCD_STR("Protocol Example");
-	LCD_RAM(80);
-	LCD_STR("c Wicki/Kasipillai");
-	_delay_ms(3000);
+	setPosition_XY(0, 2);
+	LCD_STR("c DW/SK");
+	_delay_ms(1000);
 	LCD_CLR();
 }
 
@@ -44,29 +46,34 @@ void display() {
 }
 
 void process(uint8_t Input) {
-	if(Input != 0xFF) {
-		field *Field = AppSettings.currentField;
-		command Command = {NULL};
-		switch(Input) { 
-			case UP:
-				Command = Field->Up;
-				break;
-			case LEFT:
-				Command = Field->Left;
-				break;
-			case ENTER:
-				Command = Field->Enter;
-				break;
-			case RIGHT:
-				Command = Field->Right;
-				break;
-			case DOWN:
-				Command = Field->Down;
-				break;
-		}		
-		if(Command.Payload != NULL) {
-			Command.Payload(Command.Arg);
-		}
-	}
-}
+    if(Input != 0xFF) {
+	//if(inputRepeat){
+	    field *Field = AppSettings.currentField;
+	    command Command = {NULL};
+	    switch(Input) {
+		case UP:
+		    Command = Field->Up;
+		    break;
+		case LEFT:
+		    Command = Field->Left;
+		    break;
+		case ENTER:
+		    Command = Field->Enter;
+		    break;
+		case RIGHT:
+		    Command = Field->Right;
+		    break;
+		case DOWN:
+		    Command = Field->Down;
+		    break;
+	    }		
+	    if(Command.Payload != NULL) {
+		Command.Payload(Command.Arg);
+	    }
+	    inputRepeat = 0;
+	//}
 
+    }else{
+	inputRepeat = 1;
+    }
+}

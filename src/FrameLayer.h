@@ -12,7 +12,7 @@ typedef struct {
 
 frame_t LastFrame;
 
-uint8_t sendFrame(frame_t Packet);
+uint8_t sendFrame(frame_t *Packet);
 frame_t receiveFrame();
 uint8_t receive(uint8_t Destination);
 

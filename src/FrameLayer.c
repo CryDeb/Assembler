@@ -17,7 +17,7 @@ typedef enum {
 	CheckSum
 } RecvState_t;
 
-uint8_t sendFrame(frame_t Frame) {
+uint8_t sendFrame(frame_t *Frame) {
 	uint8_t Counter;
 	uint8_t BCC = 0;
 	char *IterPtr = (char *)&Frame;
@@ -45,12 +45,13 @@ uint8_t receive(uint8_t Destination) {
 	char MoreToRecv = 1;
 	uint8_t Byte;
 	uint8_t BCC = 0;
+        
 	RecvState_t CurrentState = Source;
 	int8_t ParameterLength = -1;
 	// todo equ address
 	if(Destination == 1) {
 		while(MoreToRecv) {
-			Byte = getByte();
+			getByte(&Byte);
 			switch(CurrentState) {
 				case Source:
 					LastFrame.Source = Byte;

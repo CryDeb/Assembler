@@ -2,3 +2,4 @@ documentation/
 *.aps
 *.aws
 src/default/
+/src/build/

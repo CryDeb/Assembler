@@ -1,18 +1,20 @@
 #include <avr/io.h>
 #include <stdint.h>
+#ifndef F_CPU
 #define F_CPU 3686400L     /* Quarz mit 3.6864 Mhz */
+#endif
 #include <util/delay.h>   
-/* Defines für Includes */
+/* Defines fï¿½r Includes */
 /* LCD Port */
-#define LCD 	PORTA
-#define LCD_D 	DDRA
+#define LCD		PORTA
+#define LCD_D		DDRA
 /* Input port */
-#define KEYS 	DDRA
+#define KEYS		DDRA
 #define ROW		PORTA
-#define COLUMN	PINA
+#define COLUMN		PINA
 /* Phy Port */
 #define PhyPortTX	PORTD
-#define PhyPortRX 	PIND
+#define PhyPortRX	PIND
 #define PhyPort_D	DDRD
 #define PhyPin		PD3  
 /* Lib includes */
@@ -27,13 +29,12 @@
 
 //extern uint8_t Byte;
 #define MODE RX
-
+/*
 int main(){
 	DDRC = 0xFF;
-	uint8_t Tmp = 0;
 	/*
 	initMenu();
-	//*/
+	//*   ******************************
 	initPhyLayer();
 	setMode(MODE);
 	/*
@@ -42,7 +43,7 @@ int main(){
 	 SequenceNumL;
 	 SequenceNumH;
 	 CommandNumber;
-	 Parameters;*/
+	 Parameters;*    *********************************
 
   uint8_t b[] = {3,6,7,8};
 	frame_t Frame = {1,2,3,4,5, .Parameters = b};
@@ -54,7 +55,7 @@ int main(){
 			/*putByteAsync(0x55,TRUE);
 			W1s();W1s();
 			putByteAsync(0xAA, TRUE);
-			W1s();W1s();*/
+			W1s();W1s();* **************************************
 //			putByteAsync(i,TRUE);
 			sendFrame(&Frame);
 
@@ -71,3 +72,4 @@ int main(){
 }
 
 
+*/

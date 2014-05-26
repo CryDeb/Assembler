@@ -1,4 +1,4 @@
-#ifndef __LAYER_H__
+#ifndef _LAYER_H__
 #define __LAYER_H__
 
 #include <stddef.h>
@@ -6,33 +6,20 @@
 #include "fields.h"
 #include "layercontent.h"
 
-layer SettingsLayer = {
-	0,
-	NULL,
-	{ 
-		
-		NULL
-	}
-};
+extern field goToLeftLayerTime, goToRightLayerTime, goToEdit;
+extern field changeHour, changeMinute, changeSecond, safeChange, discardChange;
+extern field goToLeftLayerSettings, goToRightLayerSettings;
 
+layer SettingsLayer = {
+	1, updateLayerSettings, {&goToLeftLayerSettings, &goToRightLayerSettings}
+};
 
 layer ShowTimeLayer = {
-	1,
-	NULL,
-	{ 
-		
-		NULL
-	}
+	2, updateLayerShowTime, {&goToLeftLayerTime, &goToRightLayerTime, &goToEdit}
 };
 
-
 layer ChangeTimeLayer = {
-	2,
-	NULL,
-	{ 
-		
-		NULL
-	}
+	3, updateLayerEditTime, {&changeHour, &changeMinute, &changeSecond, &safeChange, &discardChange}
 };
 
 

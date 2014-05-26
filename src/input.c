@@ -9,12 +9,18 @@
 * Funktion: 	Taste_einlesen
 * Paramteter:	-
 *
-* Beschreibung: Liest aus einer Matrix-Tastatur den gedrückten Scan-COde ein
+* Beschreibung: Liest aus einer Matrix-Tastatur den gedrueckten Scan-COde ein
 * 
-* Scan-Code:	1  2  3  4
-*				5  6  7  8
-*				9 10 11 12
-*			   13 14 15 16
+* Scan-Code:	
+ *		01 05 09 13
+ *		02 06 10 14
+ *		03 07 11 15
+ *		04 08 12 16
+ * 
+ * 1  2  3  4
+*		5  6  7  8
+*		9 10 11 12
+*               13 14 15 16
 *
 **************************************************************************/
 uint8_t scanCode(){
@@ -25,8 +31,6 @@ uint8_t scanCode(){
 	uint8_t Code = 0xFF;
 	uint8_t mpr = 0;
 	uint8_t mpr2 = 0;
-	static uint8_t Last = 0xFF;
-
 	for(Count = 0; (Code == 0xFF) && (Count < NUMROWS); Count++) {
 		ROW = ~(1 << Count);
 		
@@ -36,11 +40,10 @@ uint8_t scanCode(){
 		_delay_ms(20);
 		mpr2 = (~(COLUMN) >> 4) & LNIB;
 		
-		if((mpr == mpr2) && (mpr != 0) && (Last != mpr)) {
-			Last = Code = bit_pos(mpr) + Count * NUMROWS;
-		}
+	    if((mpr == mpr2)  && (mpr != 0)){
+		Code = bit_pos(mpr) + Count * NUMROWS;
+	    }
 	}
-	
 	return Code;
 }
 

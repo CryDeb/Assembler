@@ -3,18 +3,18 @@
 
 #include <avr/io.h>
 #include <stdint.h>
-// 4Mhz für delay
+// 4Mhz fï¿½r delay
 #define F_CPU 3686400UL  
 #include <util/delay.h> 
 
 
 #if !defined(KEYS) || !defined(ROW) || ! defined(COLUMN)
 // data direction port a
-#define KEYS	DDRA
+#define KEYS	DDRB
 // port a output
-#define ROW 	PORTA
+#define ROW 	PORTB
 //port a input
-#define COLUMN	PINA
+#define COLUMN	PINB
 #endif
 
 // low nibble
