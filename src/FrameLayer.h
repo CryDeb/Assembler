@@ -8,12 +8,25 @@ typedef struct {
 	uint8_t SequenceNumH;
 	uint8_t	CommandNumber;
 	char *Parameters;
+	uint8_t CheckSum;
 } frame_t;
 
-frame_t LastFrame;
+typedef enum {
+	Destination,
+	Source,
+	SeqNumL,
+	SeqNumH,
+	CommandNum,
+	Parameters,
+	// insert new elem here
+	NumFrameElements, // special length element
+	CheckSum
+} RecvState_t;
 
+typedef void (*remoteJob)(frame_t *);
 uint8_t sendFrame(frame_t *Packet);
-frame_t receiveFrame();
+void receiveFrame(uint8_t Byte);
 uint8_t receive(uint8_t Destination);
+void handleIncomingTask();
 
 #endif

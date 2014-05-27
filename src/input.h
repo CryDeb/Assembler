@@ -4,7 +4,7 @@
 #include <avr/io.h>
 #include <stdint.h>
 // 4Mhz f�r delay
-#define F_CPU 3686400UL  
+//#define F_CPU 3686400UL  
 #include <util/delay.h> 
 
 

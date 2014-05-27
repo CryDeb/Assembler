@@ -3,9 +3,11 @@
 #include <avr/interrupt.h>
 #define PIN (1 << (PhyPin - 1))
 
-extern volatile PHYModes CommunicationMode;
-extern volatile ComunicationState CurrentState;
-extern volatile CommunicationError LastError;
+volatile ByteReceivedHandler receivedByte = NULL;
+
+volatile PHYModes CommunicationMode;
+volatile ComunicationState CurrentState;
+volatile CommunicationError LastError;
 volatile uint8_t Frame;
 uint8_t NumBitCounter;
 RingBuffer *Buffer;
@@ -31,25 +33,18 @@ CommunicationError setMode(PHYModes Mode) {
 	if(CurrentState == CS_FINISHED)
 	{
 		TCCR0 = /*(1<<CS02) |*/ (1<<CS00);
-			//TCCR0 |= (1<<CS02) | (1<<CS00);
 		CommunicationMode = Mode;
 		if(Mode == RX) {
 			// set to input
-			PhyPort_D &= ~PIN;
+			PhyPort_D &= ~(PIN);
 			// set pull up
 			PhyPortTX |= PIN;
-			// Trigger INT0 on falling edge
+			// Trigger INT on falling edge
 			MCUCR = INTMode;
-			// int 1
-						// set to input
-		/*	PhyPort_D |= PD4;
-			// set pull up
-			//PhyPortTX |= 8;
-			PhyPortRX |= PD4;
-			
-			
-			// Trigger INT0 on falling edge
-			MCUCR = INTMode;*/		
+
+			PhyPort_D |= 8;
+			MCUCR |= 1 << ISC11;
+					
 		} else {
 			// set to output
 			PhyPort_D |= PIN;
@@ -145,18 +140,23 @@ CommunicationError getByteAsync(uint8_t Block) {
 //set listen mode to listen for all bytes
 //set event listener for int1
 CommunicationError startListening(ByteReceivedHandler Handler) {
-		// clear INT1
-	GIFR |= (1<<INTF1);
-	// Enable INT1
-	GICR |= 1<<INT1;
 	if(Handler != NULL) {
 		receivedByte = Handler;
+		// clear INT1
+		GIFR |= (1<<INTF1);
+		// Enable INT1
+		GICR |= 1<<INT1;
+		setMode(RX);
+		// clear INT0
+		GIFR |= (1<<INTF0);
+		// Enable INT0
+		GICR |= 1<<INT0;
 		sei();
 	}
-	return SUCCESS;
 }
 CommunicationError stopListening() {
 	GICR &= ~(1<<INT1);	//disable INT0
+	receivedByte = NULL;
 	return SUCCESS;
 }
 
@@ -262,16 +262,22 @@ ISR(TIMER0_COMP_vect)
 					break;
 				case CS_FINISHED:
 				default:
-					PORTC = ~Frame;
+					
 					addEntry(Buffer, Frame);
 					//todo error check
 					// set prescaler to 0 
 					// to stop the timer
 					GIFR |= (1<<INTF0);
 					TCCR0 = 0;
-					//TODO TRIGGER_BYTEREVC();
-					/*PhyPortTX &= ~PD4;
-					PhyPortTX |= PD4;*/
+		
+					if(receivedByte != NULL) {
+						PhyPortTX |= 8;
+						PhyPortTX &= ~8;
+						// clear INT0
+						GIFR |= (1<<INTF0);
+						// Enable INT0
+						GICR |= 1<<INT0;
+					}
 					break;	
 			}
 			break;

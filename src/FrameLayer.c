@@ -3,87 +3,87 @@
 #include "FrameLayer.h"
 #include "PhyLayer.h"
 
-extern frame_t LastFrame;
+frame_t LastFrame;
+frame_t PendingFrame;
+uint8_t Pending;
+RecvState_t CurrentState;
+// todo relocate 
+// temporary proof of concept 
+void printAToPortC(frame_t *Frame) {
+	PORTC = 'A';
+}
 
-typedef enum {
-	Destination,
-	Source,
-	SeqNumL,
-	SeqNumH,
-	CommandNum,
-	Parameters,
-	// insert new elem here
-	NumFrameElements, // special length element
-	CheckSum
-} RecvState_t;
+remoteJob Commands[10] = {0,0,0,0,printAToPortC,0};
 
 uint8_t sendFrame(frame_t *Frame) {
-	uint8_t Counter;
+	char Counter;
 	uint8_t BCC = 0;
-	char *IterPtr = (char *)&Frame;
-	for(Counter = 0; Counter < NumFrameElements; Counter++, IterPtr++) {
-		putByte(*IterPtr);
+	char *IterPtr = (char *)Frame;
+	uint8_t Elements = NumFrameElements - 1;
+	for(Counter = 0; Counter < Elements; Counter++, IterPtr++) { 
 		if(Counter == Parameters) {
-			// get num parameters
-			uint8_t ParamLength = *IterPtr;
-			for(;ParamLength > 0; ParamLength--, IterPtr++) {
-				putByte(*IterPtr);
-				BCC ^= *IterPtr;
-			}
+			//TODO fix 
+			IterPtr = *IterPtr;
+			// get number of parameters 
+			Elements += *IterPtr;
 		}
-		BCC ^= *IterPtr; 
+		putByte(*IterPtr);
+		BCC ^= *IterPtr;
 	}
 	putByte(BCC);
+	if(getByte(TRUE) == NAK) {
+		//TODO
+	}
 }
 
-frame_t receiveFrame() {
-	// todo timeout blocking ?
-	setMode(RX);
-}
-
-uint8_t receive(uint8_t Destination) {
-	char MoreToRecv = 1;
-	uint8_t Byte;
-	uint8_t BCC = 0;
-        
-	RecvState_t CurrentState = Source;
-	int8_t ParameterLength = -1;
-	// todo equ address
-	if(Destination == 1) {
-		while(MoreToRecv) {
-			getByte(&Byte);
-			switch(CurrentState) {
-				case Source:
-					LastFrame.Source = Byte;
-					break;
-				case SeqNumL:
-					LastFrame.SequenceNumL = Byte;
-					break;
-				case SeqNumH:
-					LastFrame.SequenceNumH = Byte;
-					break;
-				case CommandNum:
-					LastFrame.CommandNumber = Byte;
-					break;
-				case Parameters:
-					if(ParameterLength = -1) {
-						ParameterLength = Byte;
-						// malloc length byte array
-					} else {
-						// add to paramter array
-						if(--ParameterLength) {
-							CurrentState = CheckSum;
-						}
-					}
-					break;
-				case CheckSum:
-					if(BCC == Byte) {
-						// ack
-					} else {
-						// nak
-					}
+void receiveFrame(uint8_t Byte) {
+	switch(CurrentState) {
+		case Destination:
+			//TODO 
+			/*if(Byte != LocalAddr) {
+				ignore frame
+			} else if (Pending == TRUE) {
+				// the else if got evaluated if destination address
+				// is local address
+				drop this frame 
+			}*/
+			LastFrame.CheckSum = 0;
+			LastFrame.Destination = Byte;
+			CurrentState = Source;
+		case Source:
+			LastFrame.Source = Byte;
+			CurrentState = SeqNumL;
+			break;
+		case SeqNumL:
+			LastFrame.SequenceNumL = Byte;
+			CurrentState = SeqNumH;
+			break;
+		case SeqNumH:
+			LastFrame.SequenceNumH = Byte;
+			CurrentState = CommandNum;
+			break;
+		case CommandNum:
+			LastFrame.CommandNumber = Byte;
+			CurrentState = Parameters;
+			break;
+		case Parameters:
+			//TODO 
+			CurrentState = CheckSum;
+			break;
+		case CheckSum:
+			if(LastFrame.CheckSum == Byte) {
+				putByteAsync(ACK, TRUE);
+				memcpy(&PendingFrame,&LastFrame, sizeof(frame_t));
+				Pending = TRUE;
+			} else {
+				putByteAsync(NAK, TRUE);
 			}
-			BCC ^= Byte;
-		}
+	}
+	LastFrame.CheckSum ^= Byte;
+}
+
+void handleIncomingTask() {
+	if(Pending) {
+		(*Commands[PendingFrame.CommandNumber])(&PendingFrame);
 	}
 }

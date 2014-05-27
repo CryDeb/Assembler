@@ -1,75 +1,22 @@
-#include <avr/io.h>
-#include <stdint.h>
-#ifndef F_CPU
-#define F_CPU 3686400L     /* Quarz mit 3.6864 Mhz */
-#endif
-#include <util/delay.h>   
-/* Defines f�r Includes */
-/* LCD Port */
-#define LCD		PORTA
-#define LCD_D		DDRA
-/* Input port */
-#define KEYS		DDRA
-#define ROW		PORTA
-#define COLUMN		PINA
-/* Phy Port */
-#define PhyPortTX	PORTD
-#define PhyPortRX	PIND
-#define PhyPort_D	DDRD
-#define PhyPin		PD3  
-/* Lib includes */
-#include "input.h"
-#include "display.h"
-#include "menu.h"
-#include "PhyLayer.h"
-#include "FrameLayer.h"
-/* Defines */
-#define TRUE 1
-#define FALSE 0
+#include "protocol.h"
 
-//extern uint8_t Byte;
-#define MODE RX
-/*
-int main(){
+#define MODE TX
+
+int main() {
 	DDRC = 0xFF;
-	/*
+	// init communication & LCD interfaces
 	initMenu();
-	//*   ******************************
 	initPhyLayer();
 	setMode(MODE);
-	/*
-	 Destination;
-	 Source;
-	 SequenceNumL;
-	 SequenceNumH;
-	 CommandNumber;
-	 Parameters;*    *********************************
-
-  uint8_t b[] = {3,6,7,8};
-	frame_t Frame = {1,2,3,4,5, .Parameters = b};
-
-	startListening(receiveFrame);
+	//TODO
+	// compiler for AVR Studio 4.19 doesn't support 
+	// extended preprocessor directives
+	if(MODE == RX)
+		startListening(receiveFrame);
+	// start LCD GUI
 	while(TRUE){
-		if(MODE == TX)
-		{
-			/*putByteAsync(0x55,TRUE);
-			W1s();W1s();
-			putByteAsync(0xAA, TRUE);
-			W1s();W1s();* **************************************
-//			putByteAsync(i,TRUE);
-			sendFrame(&Frame);
-
-		W100ms();
-		}
-		else
-		{
-			//getByteAsync(TRUE);
-			W10ms();
-			//W1s();W1s();
-			//getByteAsync();
-		}
+		process(scanCode());
+		display();
+		handleIncomingTask();
 	}
 }
-
-
-*/

@@ -35,7 +35,7 @@ void go2Layer(uint8_t LayerId){
 		LCD_CLR();
 		AppSettings.currentLayer = Layers;
 		AppSettings.Status = 7;
-		// erstes feld ist einstiegspunkt
+		// first field is entry point
 		AppSettings.currentField = Layers->Fields[0];
 	}
 }
