@@ -10,12 +10,9 @@
 #define PhyPort_D	DDRD
 #define PhyPin		PD3
 #endif
+
 #define INTPin		INT0
 #define INTMode		1<<ISC01;
-// Default Baudrate
-#ifndef BUADRATE
-#define BAUDRATE 9600
-#endif
 
 #define TIMEBETWEENBITS 1000
 
@@ -38,12 +35,6 @@ typedef enum {
 } CommunicationError;
 
 typedef void (*ByteReceivedHandler)(uint8_t Byte);
-
-ByteReceivedHandler receivedByte;
-volatile PHYModes CommunicationMode;
-volatile ComunicationState CurrentState;
-volatile uint8_t Frame;
-volatile CommunicationError LastError;
 
 CommunicationError initPhyLayer();
 CommunicationError putByte(uint8_t Byte);

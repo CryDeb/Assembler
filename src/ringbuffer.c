@@ -5,6 +5,7 @@ RingBuffer *createRingBuffer(uint8_t Size) {
 	if(Buffer != NULL) {
 		Buffer->Data =  (uint8_t*)malloc(sizeof(uint8_t)*Size);
 		if(Buffer->Data != NULL) {
+			Buffer->Size = Size;
 			clearRingBuffer(Buffer);
 		} else {
 			free(Buffer);
@@ -27,16 +28,16 @@ void ReleaseRingBuffer(RingBuffer *Buffer) {
 		free(Buffer);
 	}
 }
-
+#include <avr/io.h>
 void addEntry(RingBuffer *Buffer, int16_t Byte) {
-	if(Buffer != NULL && Buffer->Data == NULL) {
+	if(Buffer != NULL && Buffer->Data != NULL) {			
 		if(Buffer->Counter <= Buffer->Size) {
 			*(Buffer->Data + Buffer->Sentinel) = Byte;
 			Buffer->Sentinel = (Buffer->CurrentEntry + 1) % Buffer->Size;		
 			Buffer->Counter++;
 		} else {
-				// overflow sentinal + 1 will be currententry index
-				Byte = OVERFLOW;
+			// overflow sentinal + 1 will be currententry index
+			Byte = OVERFLOW;
 		}
 	}	
 }
@@ -49,6 +50,7 @@ int16_t getEntry(RingBuffer *Buffer) {
 			Buffer->CurrentEntry++;
 			Buffer->CurrentEntry %= Buffer->Size;
 			Buffer->Counter--;
+			
 		} 
 	} else {
 			Byte == INVALIDRBREF;

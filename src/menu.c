@@ -41,39 +41,33 @@ void print_splash() {
 
 void display() {
 	AppSettings.currentLayer->update(AppSettings.Status);
-	// nach update flags wieder loeschen
+	// clear flags after update
 	AppSettings.Status = 0;
 }
 
 void process(uint8_t Input) {
-    if(Input != 0xFF) {
-	//if(inputRepeat){
-	    field *Field = AppSettings.currentField;
-	    command Command = {NULL};
-	    switch(Input) {
-		case UP:
-		    Command = Field->Up;
-		    break;
-		case LEFT:
-		    Command = Field->Left;
-		    break;
-		case ENTER:
-		    Command = Field->Enter;
-		    break;
-		case RIGHT:
-		    Command = Field->Right;
-		    break;
-		case DOWN:
-		    Command = Field->Down;
-		    break;
-	    }		
-	    if(Command.Payload != NULL) {
-		Command.Payload(Command.Arg);
-	    }
-	    inputRepeat = 0;
-	//}
-
-    }else{
-	inputRepeat = 1;
-    }
+	if(Input != 0xFF) {
+		field *Field = AppSettings.currentField;
+		command Command = {NULL};
+		switch(Input) {
+			case UP:
+			    Command = Field->Up;
+			    break;
+			case LEFT:
+			    Command = Field->Left;
+			    break;
+			case ENTER:
+			    Command = Field->Enter;
+			    break;
+			case RIGHT:
+			    Command = Field->Right;
+			    break;
+			case DOWN:
+			    Command = Field->Down;
+			    break;
+		}		
+		if(Command.Payload != NULL) {
+			Command.Payload(Command.Arg);
+		}
+	}
 }
