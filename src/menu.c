@@ -11,9 +11,7 @@
 
 settings AppSettings = {
 	.Layers = {
-		&SettingsLayer,
-		&ShowTimeLayer,
-		&ChangeTimeLayer
+		&updateLayerSendFrame
 	}
 };
 
@@ -25,7 +23,7 @@ void initMenu() {
 	LCD_Init();
 
 	print_splash();
-	AppSettings.currentLayer = &ShowTimeLayer;
+	AppSettings.currentLayer = &updateLayerSendFrame;
 	AppSettings.currentField = AppSettings.currentLayer->Fields[0];
 	AppSettings.Status = 7;
 	display();

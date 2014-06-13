@@ -70,7 +70,7 @@ FORMAT = ihex
 
 
 # Target file name (without extension).
-TARGET = main
+TARGET = menu
 TARGETDIR = build/$(TARGET)
 
 
@@ -87,7 +87,7 @@ OBJDIR = build
 #include "FrameLayer.h"
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c  display.c commands.c input.c layercontent.c menu.c PhyLayer.c FrameLayer.c protocol.c ringbuffer.c
+SRC = $(TARGET).c  display.c commands.c input.c layercontent.c PhyLayer.c FrameLayer.c protocol.c ringbuffer.c
 #display.c FrameLayer.c PhyLayer.c commands.c input.c layercontent.c menu.c ringbuffer.c
 
 
