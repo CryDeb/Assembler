@@ -15,6 +15,7 @@ settings AppSettings = {
 	}
 };
 char SendingText[46]={32};
+char getingText[46];
 uint8_t inputRepeat=1;
 
 void initMenu() {

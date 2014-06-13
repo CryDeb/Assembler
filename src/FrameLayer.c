@@ -7,13 +7,21 @@ frame_t LastFrame;
 frame_t PendingFrame;
 uint8_t Pending;
 RecvState_t CurrentState;
+extern char getingText[];
 // todo relocate 
 // temporary proof of concept 
 void printAToPortC(frame_t *Frame) {
 	PORTC = 'A';
 }
+void safeOutPutText(frame_t *Frame){
+	uint8_t arrayLength= sizeof(*Frame->Parameters)
+		/ sizeof(Frame->Parameters[0]);
+	for(uint8_t count=0;count<arrayLength;count++){
+		getingText[count]=Frame->Parameters[count];
+	}
+}
 
-remoteJob Commands[10] = {0,0,0,0,printAToPortC,0};
+remoteJob Commands[10] = {0,0,0,0,printAToPortC,safeOutPutText};
 
 uint8_t sendFrame(frame_t *Frame) {
 	char Counter;

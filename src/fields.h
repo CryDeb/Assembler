@@ -34,15 +34,16 @@ field editText = {
         .AbcUp = {&changeText, _UP_}
 	//, PLACEHOLDER_UP, PLACEHOLDER_LEFT, PLACEHOLDER_ENTER, PLACEHOLDER_RIGHT, PLACEHOLDER_DOWN
 };
-field goToLeftLayer = {
-	.Pos = {0,3},
+field sendingText = {
+	.Pos = {3,3},
 	.Left = {&go2nextField, _LEFT_},
 	.Right = {&go2nextField, _RIGHT_},
 	.Down = {&go2nextField, _DOWN_},
 	.Up = {&go2nextField, _UP_},
+	.Enter = {&sendTextToNext, 0}
 };
-field sendingText = {
-	.Pos = {3,3},
+field goToLeftLayer = {
+	.Pos = {0,3},
 	.Left = {&go2nextField, _LEFT_},
 	.Right = {&go2nextField, _RIGHT_},
 	.Down = {&go2nextField, _DOWN_},
@@ -55,6 +56,7 @@ field goToRightLayer = {
 	.Right = {&go2nextField, _RIGHT_},
 	.Down = {&go2nextField, _DOWN_},
 	.Up = {&go2nextField, _UP_},
+	.Enter = {&sendTextToNext, 0}
 };
 
 #endif

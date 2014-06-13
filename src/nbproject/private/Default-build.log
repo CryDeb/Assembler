@@ -1,0 +1,131 @@
+
+-------- begin --------
+avr-gcc (GCC) 4.9.0
+Copyright (C) 2014 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+Compiling C: menu.c
+avr-gcc -c -mmcu=atmega8515 -I. -gdwarf-2 -DF_CPU=3686400UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wa,-adhlns=build/menu.lst  -std=gnu99 -MMD -MP -MF .dep/menu.o.d menu.c -o build/menu.o 
+
+Compiling C: display.c
+avr-gcc -c -mmcu=atmega8515 -I. -gdwarf-2 -DF_CPU=3686400UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wa,-adhlns=build/display.lst  -std=gnu99 -MMD -MP -MF .dep/display.o.d display.c -o build/display.o 
+display.c: In function 'LCD_Init':
+display.c:22:2: warning: implicit declaration of function 'W10ms' [-Wimplicit-function-declaration]
+  W10ms();
+  ^
+
+Compiling C: commands.c
+avr-gcc -c -mmcu=atmega8515 -I. -gdwarf-2 -DF_CPU=3686400UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wa,-adhlns=build/commands.lst  -std=gnu99 -MMD -MP -MF .dep/commands.o.d commands.c -o build/commands.o 
+
+Compiling C: input.c
+avr-gcc -c -mmcu=atmega8515 -I. -gdwarf-2 -DF_CPU=3686400UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wa,-adhlns=build/input.lst  -std=gnu99 -MMD -MP -MF .dep/input.o.d input.c -o build/input.o 
+
+Compiling C: layercontent.c
+avr-gcc -c -mmcu=atmega8515 -I. -gdwarf-2 -DF_CPU=3686400UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wa,-adhlns=build/layercontent.lst  -std=gnu99 -MMD -MP -MF .dep/layercontent.o.d layercontent.c -o build/layercontent.o 
+
+Compiling C: PhyLayer.c
+avr-gcc -c -mmcu=atmega8515 -I. -gdwarf-2 -DF_CPU=3686400UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wa,-adhlns=build/PhyLayer.lst  -std=gnu99 -MMD -MP -MF .dep/PhyLayer.o.d PhyLayer.c -o build/PhyLayer.o 
+PhyLayer.c: In function 'getByte':
+PhyLayer.c:84:8: warning: assignment makes pointer from integer without a cast
+   Byte = (uint8_t)Data;
+        ^
+PhyLayer.c: In function 'putByteAsync':
+PhyLayer.c:103:3: warning: statement with no effect [-Wunused-value]
+   Error == WOULDBLOCK;
+   ^
+PhyLayer.c: In function '__vector_14':
+PhyLayer.c:185:10: warning: variable 'Sent' set but not used [-Wunused-but-set-variable]
+  uint8_t Sent = 0;
+          ^
+PhyLayer.c: In function 'startListening':
+PhyLayer.c:156:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+
+Compiling C: FrameLayer.c
+avr-gcc -c -mmcu=atmega8515 -I. -gdwarf-2 -DF_CPU=3686400UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wa,-adhlns=build/FrameLayer.lst  -std=gnu99 -MMD -MP -MF .dep/FrameLayer.o.d FrameLayer.c -o build/FrameLayer.o 
+FrameLayer.c: In function 'sendFrame':
+FrameLayer.c:26:12: warning: assignment makes pointer from integer without a cast
+    IterPtr = *IterPtr;
+            ^
+FrameLayer.c:34:5: warning: passing argument 1 of 'getByte' makes pointer from integer without a cast
+  if(getByte(TRUE) == NAK) {
+     ^
+In file included from FrameLayer.c:4:0:
+PhyLayer.h:41:20: note: expected 'uint8_t *' but argument is of type 'int'
+ CommunicationError getByte(uint8_t *Byte);
+                    ^
+FrameLayer.c: In function 'receiveFrame':
+FrameLayer.c:76:5: warning: implicit declaration of function 'memcpy' [-Wimplicit-function-declaration]
+     memcpy(&PendingFrame,&LastFrame, sizeof(frame_t));
+     ^
+FrameLayer.c:76:5: warning: incompatible implicit declaration of built-in function 'memcpy'
+FrameLayer.c:40:2: warning: enumeration value 'NumFrameElements' not handled in switch [-Wswitch]
+  switch(CurrentState) {
+  ^
+FrameLayer.c: In function 'sendFrame':
+FrameLayer.c:37:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+
+Compiling C: protocol.c
+avr-gcc -c -mmcu=atmega8515 -I. -gdwarf-2 -DF_CPU=3686400UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wa,-adhlns=build/protocol.lst  -std=gnu99 -MMD -MP -MF .dep/protocol.o.d protocol.c -o build/protocol.o 
+
+Compiling C: ringbuffer.c
+avr-gcc -c -mmcu=atmega8515 -I. -gdwarf-2 -DF_CPU=3686400UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wa,-adhlns=build/ringbuffer.lst  -std=gnu99 -MMD -MP -MF .dep/ringbuffer.o.d ringbuffer.c -o build/ringbuffer.o 
+ringbuffer.c: In function 'createRingBuffer':
+ringbuffer.c:4:2: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  RingBuffer *Buffer = (RingBuffer *)malloc(sizeof(RingBuffer));
+  ^
+ringbuffer.c:4:37: warning: incompatible implicit declaration of built-in function 'malloc'
+  RingBuffer *Buffer = (RingBuffer *)malloc(sizeof(RingBuffer));
+                                     ^
+ringbuffer.c:11:4: warning: implicit declaration of function 'free' [-Wimplicit-function-declaration]
+    free(Buffer);
+    ^
+ringbuffer.c:11:4: warning: incompatible implicit declaration of built-in function 'free'
+ringbuffer.c: In function 'ReleaseRingBuffer':
+ringbuffer.c:27:4: warning: incompatible implicit declaration of built-in function 'free'
+    free(Buffer->Data);
+    ^
+ringbuffer.c:28:3: warning: incompatible implicit declaration of built-in function 'free'
+   free(Buffer);
+   ^
+ringbuffer.c: In function 'getEntry':
+ringbuffer.c:56:4: warning: statement with no effect [-Wunused-value]
+    Byte == INVALIDRBREF;
+    ^
+
+Linking: build/menu.elf
+avr-gcc -mmcu=atmega8515 -I. -gdwarf-2 -DF_CPU=3686400UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wa,-adhlns=build/menu.o  -std=gnu99 -MMD -MP -MF .dep/menu.elf.d build/menu.o build/display.o build/commands.o build/input.o build/layercontent.o build/PhyLayer.o build/FrameLayer.o build/protocol.o build/ringbuffer.o build/delay.o --output build/menu.elf -Wl,-Map=build/menu.map,--cref     -lm
+
+Creating load file for Flash: build/menu.hex
+avr-objcopy -O ihex -R .eeprom -R .fuse -R .lock build/menu.elf build/menu.hex
+
+Creating load file for EEPROM: build/menu.eep
+avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" \
+--change-section-lma .eeprom=0 --no-change-warnings -O ihex build/menu.elf build/menu.eep || exit 0
+
+Creating Extended Listing: build/menu.lss
+avr-objdump -h -S -z build/menu.elf > build/menu.lss
+
+Creating Symbol Table: build/menu.sym
+avr-nm -n build/menu.elf > build/menu.sym
+
+Size after:
+AVR Memory Usage
+----------------
+Device: atmega8515
+
+Program:    4430 bytes (54.1% Full)
+(.text + .data + .bootloader)
+
+Data:        321 bytes (62.7% Full)
+(.data + .bss + .noinit)
+
+
+
+-------- end --------
+

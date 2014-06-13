@@ -1,13 +1,6 @@
 #ifndef __COMMANDS_H__
 #define __COMMANDS_H__
 
-#define _RIGHT_ 0
-#define _LEFT_ 1
-#define _DOWN_ 2
-#define _UP_ 3
-#define _DISPLAY_MAX_X 16
-#define _DISPLAY_MAX_Y 4
-
 
 #include <stdint.h>
 

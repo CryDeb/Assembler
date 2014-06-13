@@ -9,6 +9,9 @@
 extern field editText, gotToLeftLayer, goToRightLayer;
 
 layer editTextLayer = {
-    1, updateLayerEditText, {&editText, &goToLeftLayer, &goToRightLayer}
+	1, updateLayerEditText, {&editText, &goToLeftLayer, &goToRightLayer}
+};
+layer showRecivedTextLayer = {
+	2, updateRecivedText, {&goToLeftLayer, &goToRightLayer}
 };
 #endif

@@ -4,6 +4,13 @@
 #include <stdint.h>
 
 
+#define _RIGHT_ 0
+#define _LEFT_ 1
+#define _DOWN_ 2
+#define _UP_ 3
+#define _DISPLAY_MAX_X 16
+#define _DISPLAY_MAX_Y 4
+
 typedef struct position {
 	uint8_t PosX:6;
 	uint8_t PosY:2;
