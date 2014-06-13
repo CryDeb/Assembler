@@ -13,13 +13,6 @@ void printAToPortC(frame_t *Frame) {
 	PORTC = 'A';
 }
 
-
-
-
-/************* TODO:Dane Wicki **********************/
-
-
-
 remoteJob Commands[10] = {0,0,0,0,printAToPortC,0};
 
 uint8_t sendFrame(frame_t *Frame) {

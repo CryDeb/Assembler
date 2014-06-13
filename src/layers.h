@@ -6,13 +6,9 @@
 #include "fields.h"
 #include "layercontent.h"
 
-extern field goToLeftLayerTime, goToRightLayerTime, goToEdit;
-extern field changeHour, changeMinute, changeSecond, safeChange, discardChange;
-extern field goToLeftLayerSettings, goToRightLayerSettings;
+extern field editText, gotToLeftLayer, goToRightLayer;
 
-layer SettingsLayer = {
-	1, updateLayerSendFrame, {&goToLeftLayerSettings, &goToRightLayerSettings}
+layer editTextLayer = {
+    1, updateLayerEditText, {&editText, &goToLeftLayer, &goToRightLayer}
 };
-
-
 #endif

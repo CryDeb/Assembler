@@ -23,6 +23,8 @@ typedef struct field {
 	command Enter;
 	command Right;
 	command Down;
+        command AbcDown;
+        command AbcUp;
 } field;
 
 typedef struct layer {
@@ -41,7 +43,7 @@ typedef struct settings {
 } settings;
 
 typedef enum inputState {
-	UP = 5, LEFT = 2, ENTER=6, RIGHT=10, DOWN = 7
+	ABCDOWN = 1, ABCUP = 9, UP = 5, LEFT = 2, ENTER=6, RIGHT=10, DOWN = 7
 } inputState;
 
 #define NUMBEROFUSEDINPUTS 5

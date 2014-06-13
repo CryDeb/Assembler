@@ -11,19 +11,17 @@
 
 settings AppSettings = {
 	.Layers = {
-		&updateLayerSendFrame
+		&editTextLayer
 	}
 };
-
-uint8_t HH = 02, MM = 50 ,SS = 15;
+char SendingText[46]={32};
 uint8_t inputRepeat=1;
 
 void initMenu() {
 	_delay_ms(20);
 	LCD_Init();
-
 	print_splash();
-	AppSettings.currentLayer = &updateLayerSendFrame;
+	AppSettings.currentLayer = &editTextLayer;
 	AppSettings.currentField = AppSettings.currentLayer->Fields[0];
 	AppSettings.Status = 7;
 	display();
@@ -48,21 +46,27 @@ void process(uint8_t Input) {
 		field *Field = AppSettings.currentField;
 		command Command = {NULL};
 		switch(Input) {
-			case UP:
-			    Command = Field->Up;
-			    break;
-			case LEFT:
-			    Command = Field->Left;
-			    break;
-			case ENTER:
-			    Command = Field->Enter;
-			    break;
-			case RIGHT:
-			    Command = Field->Right;
-			    break;
-			case DOWN:
-			    Command = Field->Down;
-			    break;
+		case UP:
+			Command = Field->Up;
+			break;
+		case LEFT:
+			Command = Field->Left;
+			break;
+		case ENTER:
+			Command = Field->Enter;
+			break;
+		case RIGHT:
+			Command = Field->Right;
+			break;
+		case DOWN:
+			Command = Field->Down;
+			break;
+		case ABCDOWN:
+			Command = Field->AbcDown;
+			break;
+		case ABCUP:
+			Command = Field->AbcUp;
+			break;
 		}		
 		if(Command.Payload != NULL) {
 			Command.Payload(Command.Arg);

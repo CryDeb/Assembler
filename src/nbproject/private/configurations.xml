@@ -15,14 +15,12 @@
       <in>delay.h</in>
       <in>display.c</in>
       <in>display.h</in>
-      <in>fields.c</in>
       <in>fields.h</in>
       <in>input.c</in>
       <in>input.h</in>
       <in>layercontent.c</in>
       <in>layercontent.h</in>
       <in>layers.h</in>
-      <in>main.c</in>
       <in>menu.c</in>
       <in>menu.h</in>
       <in>packet.h</in>

@@ -3,24 +3,94 @@
 #include "menu.h"
 #include "commands.h"
 #include "display.h"
+#include "FrameLayer.h"
+#include <stdio.h>
+#include <stdlib.h>
 
+extern field editText;
 extern settings AppSettings;
-extern uint8_t HH, MM, SS;
+extern char SendingText[];
 extern uint8_t inputRepeat;
 
-void go2Field(uint8_t Pos) {
-    if(inputRepeat){
-	field *Field = AppSettings.currentLayer->Fields[0];	
-	uint8_t PosX = Pos & 0x3F;
-	uint8_t PosY = (Pos & 0xC0) >> 6;
-	for (uint8_t count = 0; count<NUMBEROFUSEDINPUTS; count++){
-	    Field = AppSettings.currentLayer->Fields[count];
-	    if(Field->Pos.PosX == PosX && Field->Pos.PosY == PosY){
-		AppSettings.Status = 4;
-		AppSettings.currentField = Field;
-	    }
+void go2nextField(uint8_t pDirection){
+	field *Field = AppSettings.currentLayer->Fields[0];
+	uint8_t X = AppSettings.currentField->Pos.PosX;
+	uint8_t Y = AppSettings.currentField->Pos.PosY;
+	uint8_t FieldArrayLength = 
+		sizeof(*AppSettings.currentLayer->Fields) /
+		sizeof(AppSettings.currentLayer->Fields[0]);
+	switch(pDirection){
+	case _RIGHT_:
+		for(uint8_t count=0; count<FieldArrayLength;count++){
+			Field = AppSettings.currentLayer->Fields[count];
+			if(Field->Pos.PosX > X)
+				saveField(Field);
+		}
+		break;
+	case _LEFT_:
+		for(uint8_t count=0; count<FieldArrayLength;count++){
+			Field = AppSettings.currentLayer->Fields[count];
+			if(Field->Pos.PosX < X)
+				saveField(Field);
+		}
+		break;
+	case _DOWN_:
+		for(uint8_t count=0; count<FieldArrayLength;count++){
+			Field = AppSettings.currentLayer->Fields[count];
+			if(Field->Pos.PosY > Y)
+				saveField(Field);
+		}
+		break;
+	case _UP_:
+		for(uint8_t count=0; count<FieldArrayLength;count++){
+			Field = AppSettings.currentLayer->Fields[count];
+			if(Field->Pos.PosY < Y)
+				saveField(Field);
+		}
+		break;
 	}
-    }
+}
+
+void saveField(field *pField){
+	AppSettings.Status = 4;
+	AppSettings.currentField = pField;
+}
+
+void go2nextFieldfree(uint8_t pDirection){
+	uint8_t X = AppSettings.currentField->Pos.PosX;
+	uint8_t Y = AppSettings.currentField->Pos.PosY;
+	switch(pDirection){
+	case _RIGHT_:
+		if(X!=14)
+			X++;
+		else
+			go2nextField(_RIGHT_);
+		break;
+	case _LEFT_:
+		if(X!=0)
+			X--;
+		break;
+	case _DOWN_:
+		if(X!=2)
+			Y++;
+		else
+			go2nextField(_DOWN_);
+		break;
+	case _UP_:
+		if(Y!=0)
+			Y--;
+		break;
+	}
+	go2Field((Y<<6)|X);
+}
+
+void go2Field(uint8_t Pos) {
+	if(inputRepeat){
+		editText.Pos.PosX = Pos & 0x3F;
+		editText.Pos.PosY = (Pos & 0xC0) >> 6;
+		AppSettings.Status = 4;
+		AppSettings.currentField = &editText;
+	}
 }
 
 void go2Layer(uint8_t LayerId){
@@ -30,7 +100,6 @@ void go2Layer(uint8_t LayerId){
 		Index++;
 		Layers = AppSettings.Layers[Index];
 	}
-
 	if(Layers != NULL){
 		LCD_CLR();
 		AppSettings.currentLayer = Layers;
@@ -40,31 +109,23 @@ void go2Layer(uint8_t LayerId){
 	}
 }
 
-// Change The Number on the Display.
-void changeNumber(uint8_t changeValue){
-    switch(changeValue){
-	case 1:
-	    changeTimeNumber(&HH, 24);
-	    break;
-	case 2:
-	    changeTimeNumber(&MM, 60);
-	    break;
-	case 3:
-	    changeTimeNumber(&SS, 60);
-	    break;
-    }
+void changeText(uint8_t pDirection){
+	uint8_t numbArray = AppSettings.currentField->Pos.PosX + (AppSettings.currentField->Pos.PosY * 15);
+	switch (pDirection){
+	case _UP_:
+		SendingText[numbArray]++;
+		LCD_CHR(SendingText[numbArray]);
+		setPosition(getPosition()-1);
+		break;
+	case _DOWN_:
+		SendingText[numbArray]--;
+		LCD_CHR(SendingText[numbArray]);
+		setPosition(getPosition()-1);
+		break;
+	}
+	
 }
-
-
-// function will change the time number on the Display.
-void changeTimeNumber(uint8_t *Time, uint8_t maxVal){
-    CUR_OFF();
-    CURB_OFF();
-    ((*Time)<(maxVal-1))?((*Time)++):((*Time)=0);
-    setPosition(getPosition()+1);
-    LCD_OutTwoNumbers(*Time);
-    setPosition(getPosition()-3);
-    CUR_ON();
-    CURB_ON();
-    
+void sendTextToNext(uint8_t null){
+	frame_t Frame = {1,2,3,4,5, .Parameters = SendingText};
+	sendFrame(&Frame);
 }

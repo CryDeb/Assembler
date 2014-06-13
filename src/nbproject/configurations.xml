@@ -6,10 +6,8 @@
       <in>PhyLayer.c</in>
       <in>commands.c</in>
       <in>display.c</in>
-      <in>fields.c</in>
       <in>input.c</in>
       <in>layercontent.c</in>
-      <in>main.c</in>
       <in>menu.c</in>
       <in>protocol.c</in>
       <in>ringbuffer.c</in>
@@ -74,8 +72,6 @@
           </incDir>
         </cTool>
       </item>
-      <item path="fields.c" ex="false" tool="0" flavor2="0">
-      </item>
       <item path="input.c" ex="false" tool="0" flavor2="2">
         <cTool flags="0">
           <incDir>
@@ -85,13 +81,6 @@
         </cTool>
       </item>
       <item path="layercontent.c" ex="false" tool="0" flavor2="2">
-        <cTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-      </item>
-      <item path="main.c" ex="false" tool="0" flavor2="2">
         <cTool flags="0">
           <incDir>
             <pElem>.</pElem>
