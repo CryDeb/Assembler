@@ -1,3 +1,3 @@
 M242 ("Assembler")
 ==================
-Communication Protocoll written by Suki & Dane :-D
+Communication Protocoll written by Xeuks & CryDeb :-D
