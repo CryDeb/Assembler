@@ -14,8 +14,6 @@
 #define INTPin		INT0
 #define INTMode		1<<ISC01;
 
-#define TIMEBETWEENBITS 1000
-
 #define ACK 0x06
 #define NAK 0x15
 
@@ -23,9 +21,13 @@
 #define FALSE 0
 
 #define BUFFERSIZE 3
-
+//anzahl cycles um ein paket zu versenden
+#define CYCLES	192
+// modes
 typedef enum { RX, TX} PHYModes;
+//state für statemachin zum einlesen und ausgeben
 typedef enum { CS_STARTBIT, CS_FRAMEBIT, CS_STOPBIT, CS_SENDJAM,CS_FINISHED} ComunicationState;
+//error codes
 typedef enum { 
 	SUCCESS = 0, 
 	COLLISIONDETECTED, 
@@ -33,9 +35,10 @@ typedef enum {
 	INVALIDSTATE,
 	WOULDBLOCK
 } CommunicationError;
-
+//
 typedef void (*ByteReceivedHandler)(uint8_t Byte);
-
+extern uint8_t LocalAddress;
+/* prototypes */
 CommunicationError initPhyLayer();
 CommunicationError putByte(uint8_t Byte);
 CommunicationError getByte(uint8_t *Byte);
@@ -46,6 +49,7 @@ CommunicationError setMode(PHYModes Mode);
 CommunicationError getLastError();
 CommunicationError startListening(ByteReceivedHandler Handler);
 CommunicationError stopListening();
+uint8_t getJamWaitTime();
 
 
 #endif

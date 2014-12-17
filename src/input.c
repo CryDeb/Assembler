@@ -46,7 +46,30 @@ uint8_t scanCode(){
 	}
 	return Code;
 }
-
+/*******************************************************************************
+* Funktion:  bit_pos
+*									   									   
+* Autor:     Kasipillai	Sukirthan						  						   								   									   
+* Version:   1.0				   			   								   									   
+* Datum: 	 29.09.2013  							   									   
+********************************************************************************
+* Aufruf: scanCode();
+*
+* Beschreibung:
+*	Berechnet position des gesetzten bit in value.
+*	Achtung: --> precondition
+* 	z.B. 0010 liefert 2 zurück
+*
+* Precondition: 
+*	Es sollten nicht mehere Bit geseztz sein.
+*	
+*
+* Daten:
+*	uint8_t	Value	 input	Variable mit gesetztem Bit
+*	uint8_t	Position output	Stelle des gesetzten Bits
+*
+* Copyright (c) 2013 by K Sukirthan CH Zug 6300
+*******************************************************************************/
 uint8_t bit_pos(uint8_t Value){
 	// position des bit
 	uint8_t Position = 0;

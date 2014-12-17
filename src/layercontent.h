@@ -2,6 +2,8 @@
 #define __LAYERCONTENT_H__
 
 #include <stdint.h>
+
+/* prototypes */
 void updateLayerShowTime(uint8_t pStatus);
 void updateLayerEditTime(uint8_t pStatus);
 void updateLayerSettings(uint8_t pStatus);

@@ -2,7 +2,7 @@
 #define __DISPLY_H__
 
 #include <stdint.h>
-
+/* defines */
 #define TRUE 		1
 #define FALSE 0
 #define RS 			4
@@ -16,6 +16,7 @@
 #define CURSOR_B 	0
 #define NUMBEROFCHRFIELDS 64
 
+/* Prototypes */
 void LCD_Init();
 void function_set(uint8_t p_byte);
 void commands(uint8_t p_byte);

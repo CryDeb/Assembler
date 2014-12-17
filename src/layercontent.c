@@ -1,9 +1,17 @@
 #include "layercontent.h"
 #include "display.h"
 #include "menu.h"
-
+// menu settings & variablen
 extern settings AppSettings;
+// Stunden, Minuten, Sekunde
 extern uint8_t HH, MM, SS;
+
+/*******************************************************************************
+* Beschreibung:
+*	Hier werden die Inhalte der Ebenen ausgegeben. Alle Ebenen haben einen 
+*	handler der die Ausgabe verwaltet, diese werden hier definiert.
+*******************************************************************************/
+
 void updateLayerShowTime(uint8_t pStatus){
     uint8_t x = AppSettings.currentField->Pos.PosX;
     uint8_t y = AppSettings.currentField->Pos.PosY;
@@ -59,6 +67,7 @@ void updateLayerEditTime(uint8_t pStatus){
 	}
     }
 }
+
 void updateLayerSettings(uint8_t pStatus){
     uint8_t x = AppSettings.currentField->Pos.PosX;
     uint8_t y = AppSettings.currentField->Pos.PosY;
