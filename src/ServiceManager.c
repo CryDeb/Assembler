@@ -49,3 +49,7 @@ void removeService(uint8_t CommandNr) {
 	if(CommandNr < MAX_SERVICES)
 		Services[CommandNr] = 0;
 }
+
+void initJobs() {
+	addService(0,printToPortC);
+}

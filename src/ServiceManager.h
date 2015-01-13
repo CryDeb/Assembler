@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "FrameLayer.h"
+#include "Jobs.h"
 //anzahl services
 #define MAX_SERVICES 10
 

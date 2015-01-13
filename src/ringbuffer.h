@@ -31,5 +31,6 @@ int16_t addEntry(RingBuffer *Buffer, uint8_t Byte);
 int16_t getEntry(RingBuffer *Buffer); 
 void releaseRingBuffer(RingBuffer *Buffer);
 void clearRingBuffer(RingBuffer *Buffer);
+void initJobs();
 
 #endif

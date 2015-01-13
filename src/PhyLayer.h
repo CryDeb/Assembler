@@ -26,7 +26,7 @@
 // modes
 typedef enum { RX, TX} PHYModes;
 //state für statemachin zum einlesen und ausgeben
-typedef enum { CS_STARTBIT, CS_FRAMEBIT, CS_STOPBIT, CS_SENDJAM,CS_FINISHED} ComunicationState;
+typedef enum { CS_STARTBIT, CS_FRAMEBIT, CS_STOPBIT, CS_SENDJAM, CS_FINISHED, CS_END} ComunicationState;
 //error codes
 typedef enum { 
 	SUCCESS = 0, 

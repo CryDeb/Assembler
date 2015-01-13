@@ -49,30 +49,38 @@
 *******************************************************************************/
 int main() {
 	DDRC = 0xFF;
-	uint8_t b[] = {0,6,7};
-	frame_t frame = {1,2,3,4,5,&b};
-	int Byte = 0x55; 
+	DDRB = 0x00;
+	uint8_t b[] = {2,6,7};
+	frame_t frame = {1,2,3,4,0,&b};
+	int Byte = 0x12; 
 
 	// init communication & LCD interfaces
 	initMenu();
 	initPhyLayer();
 	initLayer();
+	initJobs();
 	setMode(MODE);
-
+	W1s();W1s();
 	// compiler for AVR Studio 4.19 doesn't support 
 	// extended preprocessor directives
 	if(MODE == RX)
 		startListening(receiveFrame);
 	else
-		W1s();W1s();
+		W1s();W1s();W1s();
 	// start LCD GUI
 	while(TRUE){
 		/*process(scanCode());
 		display();
-		handleIncomingTask();*/
+		*/
 		if(MODE == TX) {
-			sendFrame(&frame);
-		} 
-		W1s();
+			//putByteAsync(Byte,1);
+			if(PINB != 0xFF)
+				sendFrame(&frame);
+			Byte = ~Byte;
+
+		} else {
+			handleIncomingTask();
+		}
+		W1s();W1s();//W1s();W1s();W1s();
 	}
 }

@@ -86,13 +86,20 @@ uint8_t sendFrame(frame_t *Frame) {
 *
 *******************************************************************************/
 void receiveFrame(uint8_t Byte) {
+
+  	PORTC = Byte;
 	switch(CurrentState) {
 		case Destination:
+
 			if(Byte != LocalAddress || Pending == TRUE) {
 				Ignore  = 1;
+				
 			} else {
 				Ignore = 0;
+				
 			}
+			Ignore = 0;
+			
 			ParameterLength = ParameterIndex = 0;
 			LastFrame.CheckSum = 0;
 			LastFrame.Destination = Byte;
@@ -101,6 +108,7 @@ void receiveFrame(uint8_t Byte) {
 		case Source:
 			LastFrame.Source = Byte;
 			CurrentState = SeqNumL;
+			
 			break;
 		case SeqNumL:
 			LastFrame.SequenceNumL = Byte;
@@ -115,31 +123,39 @@ void receiveFrame(uint8_t Byte) {
 		case CommandNum:
 			LastFrame.CommandNumber = Byte;
 			CurrentState = Parameters;
+			
 			break;
 		case Parameters:
 			if(ParameterLength == 0) {
 				ParameterLength = Byte;
 				LastFrame.Parameters = (char *)malloc(ParameterLength);
 			} 
-			
+		
 			LastFrame.Parameters[ParameterIndex++] = Byte;				
 			if(ParameterLength == ParameterIndex)
 				CurrentState = CheckSum;
 			break;
 		case CheckSum:
+			
 			if(Ignore == 0) {
+				
 				if(LastFrame.CheckSum == Byte && Pending == FALSE) {
+PORTC = 0x0f;
 					putByteAsync(ACK, TRUE);
 					memcpy(&PendingFrame,&LastFrame, sizeof(frame_t));
 					Pending = TRUE;
+					
 				
 				} else {
-					putByteAsync(NAK, TRUE);
+					//putByteAsync(NAK, TRUE);
+					free(PendingFrame.Parameters);
 				}
-			}
+			} 
+		
 			CurrentState = Destination;
 			break;
 	}
+	
 	LastFrame.CheckSum ^= Byte;
 }
 /*******************************************************************************
@@ -161,7 +177,8 @@ void receiveFrame(uint8_t Byte) {
 *******************************************************************************/
 void handleIncomingTask() {
 	if(Pending) {
-		Services[PendingFrame.CommandNumber](&PendingFrame);
+		PORTC = 0xf0;
+		//Services[PendingFrame.CommandNumber](&PendingFrame);
 		free(PendingFrame.Parameters);
 		Pending = FALSE;
 	}

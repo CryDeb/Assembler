@@ -32,7 +32,7 @@ uint8_t LocalAddress;
 #define SET_LOW(x) ((x) &= ~PIN)
 #define SET_HIGH(x) ((x) |= PIN)
 #define GET_STATE(x) ((x) & PIN)
-#define MIN_WAIT_CYCLE 20
+#define MIN_WAIT_CYCLE 65500
 /*******************************************************************************
 * Funktion:  initPhyLayer
 *									   									   
@@ -58,7 +58,7 @@ uint8_t LocalAddress;
 *******************************************************************************/
 CommunicationError initPhyLayer() {
 	CurrentState = CS_FINISHED;
-
+	LocalAddress = 1;
 #ifdef USE_TIMER0
 	OCR0 = 255;
 	TCCR0 = 0x00;
@@ -68,7 +68,7 @@ CommunicationError initPhyLayer() {
 	TCCR1B = 0;
 	TCCR1A = (1 << WGM12) | (1 << COM1A0);
 
-	TCCR1B = /*(1 << CS10) |*/(1 << CS11);
+	TCCR1B = (1 << CS10) | (1 << CS12);
 	OCR1A = CYCLES;
 #endif
 
@@ -458,6 +458,7 @@ ISR(INT1_vect) {
 *******************************************************************************/
 ISR(INT0_vect) {
 	CurrentState = CS_STARTBIT;
+	
 #ifdef USE_TIMER0
 	OCR0 = 128;
 	TCCR0 = (1 << CS00);
@@ -540,11 +541,12 @@ ISR(INT0_vect) {
 					// start indizieren
 					Sent = SET_LOW(PhyPortTX);
 					CurrentState = CS_FRAMEBIT;
+					//PORTC = 1;
 					break;
 				case CS_FRAMEBIT:
-					
 					// bits senden
 					Sent = ((Frame >> NumBitCounter) & 0x01) ? SET_HIGH(PhyPortTX) : SET_LOW(PhyPortTX);
+					
 
 					if(++NumBitCounter >=  8)
 						CurrentState = CS_STOPBIT;
@@ -555,12 +557,13 @@ ISR(INT0_vect) {
 					if(++NumBitCounter >= JamWaitTime)
 						CurrentState = CS_STOPBIT;
 					break;
-				case CS_STOPBIT:				
+				case CS_STOPBIT:
+					PORTC = ~Frame;				
 					// stop bit senden
 					Sent = SET_HIGH(PhyPortTX);
-					
-
-					PORTC = Frame;
+					CurrentState = CS_END;
+				
+				case CS_END:	
 					// stop timer
 #ifdef USE_TIMER0
 					TCCR0 = 0;
@@ -583,29 +586,46 @@ ISR(INT0_vect) {
 					CurrentState = CS_FRAMEBIT;
 					// anzahl zyklen wieder setzen
 					OCR1A = CYCLES;
+					//TCNT1 = 0;
 					OCR0 = 255;
+					
 					break;
 				case CS_FRAMEBIT:
 					// receive lsb to msb
-					Frame |= (((PhyPortRX) & PIN)) ? 0 : 1 << NumBitCounter;
-					
+					Frame |= (((PhyPortRX) & PIN)) ?  1 << NumBitCounter : 0;
+					//PORTC = (((PhyPortRX) & PIN)) ? 1 << NumBitCounter : 0;
 					
 					if(++NumBitCounter >= 8)
 					{
 						CurrentState = CS_STOPBIT;
 						
+						
 					}
 					break;
-				case CS_STOPBIT:	
+				case CS_STOPBIT:
+						
 					GIFR |= (1<<INTF0);				
-					uint8_t Bit = (((PhyPortRX) & PIN)) ? 0 : 1 << NumBitCounter;
-					if(Bit != 1)
+					uint8_t Bit = (((PhyPortRX) & PIN)) ?   1 : 0;
+					if(Bit > 1)
 					{
+					
 						//Jam recv
 						LastError = COLLISIONDETECTED;
+					} else {
+						
+						if(receivedByte != NULL) {
+							//PhyPortTX |= 8;
+							//PhyPortTX &= ~8;
+
+							receivedByte(Frame);
+						
+						} else {
+							addEntry(Buffer, Frame);
+						}
+
+						
 					}
 
-					
 					// to stop the timer
 #ifdef USE_TIMER0
 					TCCR0 = 0;
@@ -615,27 +635,20 @@ ISR(INT0_vect) {
 					TCCR1B = 0;
 #endif
 
-					if(receivedByte != NULL) {
-						PhyPortTX |= 8;
-						PhyPortTX &= ~8;
-
-						receivedByte(Frame);
+					// clear INT0
+					GIFR |= (1<<INTF0);
+					// Enable INT0
+					GICR |= 1<<INT0;
+		
+					if(stopListeningMode > 0) {
 						// clear INT0
 						GIFR |= (1<<INTF0);
 						// Enable INT0
 						GICR |= 1<<INT0;
-				
-						if(stopListeningMode > 0) {
-							// clear INT0
-							GIFR |= (1<<INTF0);
-							// Enable INT0
-							GICR |= 1<<INT0;
-							// handler entfernen
-							receivedByte = NULL;
-						}
-					} else {
-						addEntry(Buffer, Frame);
+						// handler entfernen
+						receivedByte = NULL;
 					}
+
 					CurrentState = CS_FINISHED;
 					break;	
 			}
